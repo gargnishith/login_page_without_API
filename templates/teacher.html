@@ -1,84 +1,125 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
-<style>
-table,td,tr
-{border: 2px solid black;
+    <title>Teacher's Page</title>
+
+    <style>
+        table 
+        {
+            width: 100%;
+            font: 17px Calibri;
+        }
+        table, th, td 
+        {
+border: 2px solid black;
 text-align:center;
+font-size:1.25em;
+text-shadow:0.25px 0.25px blue;
+        }
+		h1{text-align:center;
+   text-shadow:0.5px 0.5px blue;
+   font-size:5em;
+  padding:3px 2px;}
+  
+ body
+{
+  background-image:url('39f45e96ba6b184ce9772f19a61e8550.jpg');
+  background-size:auto;
+
 }
-h1{text-align:center;}
-</style>
-
-<script language="javascript">
- function addRow(tableID)
- {
-  var table = document.getElementById(tableID);
-  var rowCount = table.rows.length;
-  var row = table.insertRow(rowCount);
-  
-  var cell1 = row.insertCell(0);
-  var element1 = document.createElement("input");
-  element1.type = "text";
-  element1.name = "Name";
-  cell1.appendChild(element1);
-  
-  var cell2 = row.insertCell(1);
-  var element2 = document.createElement("input");
-  element2.type = "text";
-  element2.name = "Roll no";
-  cell2.appendChild(element2);
-  
-  var cell3 = row.insertCell(2);
-  var element3 = document.createElement("input");
-  element3.type = "text";
-  element3.name = "gmail";
-  cell3.appendChild(element3);
-  
-  var cell4 = row.insertCell(3);
-  var element4 = document.createElement("input");
-  element4.type = "checkbox";
-  element4.name = "check";
-  cell4.appendChild(element4);
-  
- }
- function deleteRow(tableID)
- {
- try{
- var table = document.getElementById(tableID);
- var rowCount = table.rows.length;
- 
- for(var i=0;i<rowCount;i++)
- {
- var row=table.rows[i];
- var checkbox = row.cells[3].childNodes[0];
- if(null != checkbox && true == checkbox.checked)
- {
- table.deleteRow(i);
- rowCount--;
- i--;
- }
- }
- }
- catch(e)
- {alert(e);}
- }
- 
-</script>
+    </style>
 </head>
-<body>
-<h1> Teacher's Page </h1>
-<input type="button" value="Add Student" onclick="addRow('datatable')"/>
-<input type="button" value="Delete Student" onclick="deleteRow('datatable')" />
+<body onload="createTable()">
+    <h1> Teacher's Page </h1>
+    <p>
+        <input type="button" id="addRow" value="Add New Row" onclick="addRow()" />
+    </p>
 
-<table id="datatable" width=100% >
-<thead>
-<tr>
-<td>Name</td>
-<td>Roll No.</td>
-<td>Gmail</td>
-<td>
-</tr>
+    <!--THE CONTAINER WHERE WE'll ADD THE DYNAMIC TABLE-->
+    <div id="cont"></div>
 
-</thead>
-</table>
+    <p><input type="button" id="bt" value="Sumbit Data" onclick="sumbit()" /></p>
 </body>
+
+<script>
+    var arrHead = new Array();
+    arrHead = ['', 'Name', 'Roll No.', 'E-mail']; 
+
+    function createTable() {
+        var empTable = document.createElement('table');
+        empTable.setAttribute('id', 'empTable');         
+		
+
+        var tr = empTable.insertRow(-1);
+
+        for (var h = 0; h < arrHead.length; h++) {
+            var th = document.createElement('th');          // TABLE HEADER.
+            th.innerHTML = arrHead[h];
+            tr.appendChild(th);
+        }
+
+        var div = document.getElementById('cont');
+        div.appendChild(empTable);    // ADD THE TABLE TO YOUR WEB PAGE.
+    }
+
+    // ADD A NEW ROW TO THE TABLE.s
+    function addRow() {
+        var empTab = document.getElementById('empTable');
+
+        var rowCnt = empTab.rows.length;        // GET TABLE ROW COUNT.
+        var tr = empTab.insertRow(rowCnt);      // TABLE ROW.
+        tr = empTab.insertRow(rowCnt);
+
+        for (var c = 0; c < arrHead.length; c++) {
+            var td = document.createElement('td');          // TABLE DEFINITION.
+            td = tr.insertCell(c);
+
+            if (c == 0) {           // FIRST COLUMN.
+                // ADD A BUTTON.
+                var button = document.createElement('input');
+
+                // SET INPUT ATTRIBUTE.
+                button.setAttribute('type', 'button');
+                button.setAttribute('value', 'Remove');
+
+                // ADD THE BUTTON's 'onclick' EVENT.
+                button.setAttribute('onclick', 'removeRow(this)');
+
+                td.appendChild(button);
+            }
+            else {
+                // CREATE AND ADD TEXTBOX IN EACH CELL.
+                var ele = document.createElement('input');
+                ele.setAttribute('type', 'text');
+                ele.setAttribute('value', '');
+
+                td.appendChild(ele);
+            }
+        }
+    }
+
+    // DELETE TABLE ROW.
+    function removeRow(oButton) {
+        var empTab = document.getElementById('empTable');
+        empTab.deleteRow(oButton.parentNode.parentNode.rowIndex);       // BUTTON -> TD -> TR.
+    }
+
+    // EXTRACT AND SUBMIT TABLE DATA.
+    function sumbit() {
+        var myTab = document.getElementById('empTable');
+        var values = new Array();
+
+        // LOOP THROUGH EACH ROW OF THE TABLE.
+        for (row = 1; row < myTab.rows.length - 1; row++) {
+            for (c = 0; c < myTab.rows[row].cells.length; c++) {   // EACH CELL IN A ROW.
+
+                var element = myTab.rows.item(row).cells[c];
+                if (element.childNodes[0].getAttribute('type') == 'text') {
+                    values.push("'" + element.childNodes[0].value + "'");
+                }
+            }
+        }
+        console.log(values);
+    }
+</script>
+</html>
