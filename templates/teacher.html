@@ -1,125 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Teacher's Page</title>
-
-    <style>
-        table 
-        {
-            width: 100%;
-            font: 17px Calibri;
-        }
-        table, th, td 
-        {
-border: 2px solid black;
-text-align:center;
-font-size:1.25em;
-text-shadow:0.25px 0.25px blue;
-        }
-		h1{text-align:center;
-   text-shadow:0.5px 0.5px blue;
-   font-size:5em;
-  padding:3px 2px;}
-  
- body
-{
-  background-image:url('39f45e96ba6b184ce9772f19a61e8550.jpg');
-  background-size:auto;
-
-}
-    </style>
+	<title>TEACHER'S PAGE</title>
+	
 </head>
-<body onload="createTable()">
-    <h1> Teacher's Page </h1>
-    <p>
-        <input type="button" id="addRow" value="Add New Row" onclick="addRow()" />
-    </p>
+<body>
+	    <table>
+				{% for row in info  %}
+				<tr>
+					<th> {{ row[0 ]}}</th>
+					<th> {{ row[1 ]}}</th>
+					<th> {{ row[2 ]}}</th>
+					<th> {{ row[3 ]}}</th>
+				</tr>
+				{% endfor %}
+			</table>
+	<div id="container">
+		<div id="title">
 
-    <!--THE CONTAINER WHERE WE'll ADD THE DYNAMIC TABLE-->
-    <div id="cont"></div>
-
-    <p><input type="button" id="bt" value="Sumbit Data" onclick="sumbit()" /></p>
+            <h1>TEACHER'S PAGE</h1>
+            
+		<div id="authentication">
+			<p><strong>Before Proceding kindly authenticate!!!</strong></p>
+			<div id="ADD">
+				<br>
+				<form action="/profile/add" method="POST">
+  					 Name:<br>
+ 					 <input type="text" name="name" placeholder="" required="true">
+ 					 <br><br>
+					 Age:<br>
+					 <input type="text" name="age" placeholder="" required="true">
+					 <br><br>
+					 email id:<br>
+                     <input type="text" name="email" placeholder="" required="true">
+                     teacher:<br>
+                     <input type="text" name="tname" placeholder="" required="true">
+					 <button class="btn" id="update-btn">ADD</button>
+				</form> 
+			</div>
+			<div id="delete">
+                <form action="/profile/delete" method="POST">
+                     Name:<br>
+                     <input type="text" name="name" placeholder="" required="true">
+                     teacher:<br>
+                     <input type="text" name="tname" placeholder="" required="true">
+					 <br><br>
+					 <button class="btn" id="delete-btn">DELETE</button>
+				</form> 
+			</div>
+		</div>
+    </div>
 </body>
-
-<script>
-    var arrHead = new Array();
-    arrHead = ['', 'Name', 'Roll No.', 'E-mail']; 
-
-    function createTable() {
-        var empTable = document.createElement('table');
-        empTable.setAttribute('id', 'empTable');         
-		
-
-        var tr = empTable.insertRow(-1);
-
-        for (var h = 0; h < arrHead.length; h++) {
-            var th = document.createElement('th');          // TABLE HEADER.
-            th.innerHTML = arrHead[h];
-            tr.appendChild(th);
-        }
-
-        var div = document.getElementById('cont');
-        div.appendChild(empTable);    // ADD THE TABLE TO YOUR WEB PAGE.
-    }
-
-    // ADD A NEW ROW TO THE TABLE.s
-    function addRow() {
-        var empTab = document.getElementById('empTable');
-
-        var rowCnt = empTab.rows.length;        // GET TABLE ROW COUNT.
-        var tr = empTab.insertRow(rowCnt);      // TABLE ROW.
-        tr = empTab.insertRow(rowCnt);
-
-        for (var c = 0; c < arrHead.length; c++) {
-            var td = document.createElement('td');          // TABLE DEFINITION.
-            td = tr.insertCell(c);
-
-            if (c == 0) {           // FIRST COLUMN.
-                // ADD A BUTTON.
-                var button = document.createElement('input');
-
-                // SET INPUT ATTRIBUTE.
-                button.setAttribute('type', 'button');
-                button.setAttribute('value', 'Remove');
-
-                // ADD THE BUTTON's 'onclick' EVENT.
-                button.setAttribute('onclick', 'removeRow(this)');
-
-                td.appendChild(button);
-            }
-            else {
-                // CREATE AND ADD TEXTBOX IN EACH CELL.
-                var ele = document.createElement('input');
-                ele.setAttribute('type', 'text');
-                ele.setAttribute('value', '');
-
-                td.appendChild(ele);
-            }
-        }
-    }
-
-    // DELETE TABLE ROW.
-    function removeRow(oButton) {
-        var empTab = document.getElementById('empTable');
-        empTab.deleteRow(oButton.parentNode.parentNode.rowIndex);       // BUTTON -> TD -> TR.
-    }
-
-    // EXTRACT AND SUBMIT TABLE DATA.
-    function sumbit() {
-        var myTab = document.getElementById('empTable');
-        var values = new Array();
-
-        // LOOP THROUGH EACH ROW OF THE TABLE.
-        for (row = 1; row < myTab.rows.length - 1; row++) {
-            for (c = 0; c < myTab.rows[row].cells.length; c++) {   // EACH CELL IN A ROW.
-
-                var element = myTab.rows.item(row).cells[c];
-                if (element.childNodes[0].getAttribute('type') == 'text') {
-                    values.push("'" + element.childNodes[0].value + "'");
-                }
-            }
-        }
-        console.log(values);
-    }
-</script>
 </html>
